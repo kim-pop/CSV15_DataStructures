@@ -1,0 +1,9 @@
+﻿  Ant.cpp
+  Bug.cpp
+  Organism.cpp
+  World.cpp
+  main.cpp
+C:\Users\Kimyay\Documents\Moorpark and Ventura\Data Structs CS V15\Ants-and-bugs-master\main.cpp(9,23): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  Generating Code...
+C:\Users\Kimyay\Documents\Moorpark and Ventura\Data Structs CS V15\Ants-and-bugs-master\main.cpp(13,10): warning C4101: 'ch': unreferenced local variable
+  BUG.vcxproj -> C:\Users\Kimyay\Documents\Moorpark and Ventura\Data Structs CS V15\BUG\Debug\BUG.exe
