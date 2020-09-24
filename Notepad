@@ -1,0 +1,97 @@
+#pragma once
+class Node {
+public:
+	char letter;
+	Node* next;
+	Node* previous;
+	Node* start;
+	Node* end;
+	Node* tempPtr;
+	Node();
+	Node(char c);
+	void getLetters();
+	void printLetters();
+
+};
+
+_+_+_+_+_+_+_+_+_+_+_
+
+#include "Node.h"
+#include <iostream>
+#include <conio.h>
+
+using namespace std;
+
+Node::Node() {
+	next = previous = NULL;
+}
+
+Node::Node(char c) {
+	next = previous = NULL;
+	letter = c;
+}
+
+void Node :: getLetters() {
+	
+	start = nullptr;
+	end = nullptr;
+	char kbInput;
+
+	while (1) {
+		kbInput = _getch();
+
+		if (kbInput == 27)
+			break;
+
+		tempPtr = new Node();
+		tempPtr->letter = kbInput;
+		tempPtr->next = nullptr;
+		tempPtr->previous = nullptr;
+
+		if (start == nullptr) {
+			start = tempPtr;
+			end = start;
+		}
+		else {
+			end->next = tempPtr;
+			tempPtr->previous = end;
+			end = tempPtr;
+		}
+	}
+}
+void Node::printLetters() {
+	cout << "You typed: ";
+	Node* print;
+	print = start;
+	while (print != nullptr) {
+		cout << print->letter << " ";
+		print = print->next;
+	}
+	cout << "Here is the list backwards: ";
+	print = end;
+	while (print != nullptr) {
+		cout << print->letter << " ";
+		print = print->previous;
+	}
+}
+//at 1:00:10 mark how to delete node in middle of link list!
+//at 1:12:15 mark how to insert node at beginning, middle and end
+
+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_
+
+#include <iostream>
+#include <string>
+#include <conio.h>
+#include "Node.h"
+
+using namespace std;
+
+
+int main() {
+	
+	Node run;
+	run.getLetters();
+	run.printLetters();
+	
+	return 0;
+}
