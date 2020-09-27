@@ -1,24 +1,7 @@
-#pragma once
-class Node {
-public:
-	char letter;
-	Node* next;
-	Node* previous;
-	Node* start;
-	Node* end;
-	Node* tempPtr;
-	Node();
-	Node(char c);
-	void getLetters();
-	void printLetters();
-
-};
-
-_+_+_+_+_+_+_+_+_+_+_
-
 #include "Node.h"
 #include <iostream>
 #include <conio.h>
+#include <Windows.h>
 
 using namespace std;
 
@@ -31,67 +14,169 @@ Node::Node(char c) {
 	letter = c;
 }
 
+void Node::gotoxy(int row, int col) {
+	COORD coord;
+	coord.X = row;
+	coord.Y = col;
+	SetConsoleCursorPosition(
+		GetStdHandle(STD_OUTPUT_HANDLE),
+		coord
+	);
+}
+void Node::ShowConsoleCursor(bool showFlag) {
+	HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);
+
+	CONSOLE_CURSOR_INFO cursorInfo;
+
+	GetConsoleCursorInfo(out, &cursorInfo);
+	cursorInfo.bVisible = showFlag;
+	SetConsoleCursorInfo(out, &cursorInfo);
+}
+
+
 void Node :: getLetters() {
 	
 	start = nullptr;
 	end = nullptr;
-	char kbInput;
+	current = nullptr;
+	x = y = 0;
+///////////// setting all array pointers to null///////////////!
+	for (int i = 0; i < 20; i++) 
+	{
+		rows[i] = nullptr;
+	}
 
+//////////Getting all input from keyboard/////////////////////!
 	while (1) {
 		kbInput = _getch();
 
+//////////////If ESC is pressed///////////////////////////////!	
 		if (kbInput == 27)
+		{
 			break;
-
-		tempPtr = new Node();
-		tempPtr->letter = kbInput;
-		tempPtr->next = nullptr;
-		tempPtr->previous = nullptr;
-
-		if (start == nullptr) {
-			start = tempPtr;
-			end = start;
+			//later ask to save
+			//then clean memory
+			//loop - t = t->next
+			//loop - delete(t->previous)
 		}
+////////////if Backspace key is pressed////////////////////!
+		else if (kbInput == 8)
+		{
+			if (end->previous != nullptr) {
+				end = end->previous;
+				delete(end->next);
+				end->next = nullptr;
+				x--;
+			}
+			else {
+				start = nullptr;
+				x--;
+			}
+			
+		}
+///////////////if ENTER is pressed/////////////////////////!
+		else if (kbInput == 13) {
+			if (number <= 20) {
+				number++;
+				y++;
+				x = 0;
+				start = end = current = rows[number];
+				
+				
+			}
+		}
+///////////////left arrow//////////////////////////////////!
+		else if (kbInput == -32)
+		{
+			kbInput = _getch();
+			
+			if (kbInput == 75){
+				
+				if (x >= 1) //making sure to stay in bounds
+				{
+					current = current->previous;
+					x--;
+				}
+			}
+		}
+////////////right arrow////////////////////////////////WHY DOES THIS NOT WORK????
+		else if (kbInput == -32)
+		{
+			kbInput = _getch();
+
+			if (kbInput == 77) {
+
+				if (current != end) //making sure to stay in bounds
+				{
+					current = current->next;
+					x++;
+				}
+			}
+		}
+//////////////Starting typing from begining///////////////////////////////!
 		else {
-			end->next = tempPtr;
-			tempPtr->previous = end;
-			end = tempPtr;
+
+			if (start == nullptr) {
+
+				Node* tempPtr = new Node(kbInput);
+				start = tempPtr;
+				end = tempPtr;
+				current = tempPtr;
+				rows[number] = start;
+				start->previous = rows[number];
+				x++;
+
+			}
+//////////Using the left arrow key and inserting at the END////////////////////////!
+			else {
+				if (current == end) {
+					Node* tempPtr = new Node(kbInput);
+					end->next = tempPtr;
+					tempPtr->previous = end;
+					end = tempPtr;
+					current = end;
+					x++;
+				}
+//////////Using the left arrow key and inserting at the BEGINNING////////////////////////NO CRASH BUT NEEDS WORK
+				if(current == nullptr) {
+					Node* tempPtr = new Node(kbInput);
+					tempPtr->next = current->next;
+					current->previous = tempPtr;
+					current = tempPtr;
+					current = start;
+					x++;
+				}
+//////////Using the left arrow key and inserting at the MIDDLE////////////////////////!
+				if (current->next != nullptr && current->previous != nullptr){
+					Node* tempPtr = new Node(kbInput);
+					tempPtr->next = current->next;
+					current->next->previous = tempPtr;
+					tempPtr->previous = current;
+					current->next = tempPtr;
+					current = tempPtr;
+					x++;
+				}
+				
+			}
 		}
+		system("cls");
+		printLetters();
+		gotoxy(x, y);
 	}
 }
 void Node::printLetters() {
-	cout << "You typed: ";
-	Node* print;
-	print = start;
-	while (print != nullptr) {
-		cout << print->letter << " ";
-		print = print->next;
-	}
-	cout << "Here is the list backwards: ";
-	print = end;
-	while (print != nullptr) {
-		cout << print->letter << " ";
-		print = print->previous;
+	
+	for (int i = 0; i < 20; i++)
+	{
+		if(rows[i] != nullptr){
+			Node* print;
+			print = rows[i];
+			while (print != nullptr) {
+				cout << print->letter;
+				print = print->next;
+			}
+			cout << endl;
+		}
 	}
 }
-//at 1:00:10 mark how to delete node in middle of link list!
-//at 1:12:15 mark how to insert node at beginning, middle and end
 
-_+_+_+_+_+_+_+_+_+_+_+_+_+_+_
-
-#include <iostream>
-#include <string>
-#include <conio.h>
-#include "Node.h"
-
-using namespace std;
-
-
-int main() {
-	
-	Node run;
-	run.getLetters();
-	run.printLetters();
-	
-	return 0;
-}
